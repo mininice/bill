@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # bill 
 
 ## 快速开始
@@ -87,3 +88,4 @@ npm start       # 输出环境
 ├── webpack                     # webpack配置
 └── webroot                     # 静态资源目录
 ```
+=======
