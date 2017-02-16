@@ -10,7 +10,7 @@ const app = new Koa()
 app.keys = ['app-proto']
 
 
-var dbMysql = require('@mtfe/ice-db-mysql');
+var dbMysql = require('koa-mysql-sequelize');
 var path = require('path');
 
 var modelPath = path.join(process.cwd(), 'server/model');//指定DAO model存放的目录
