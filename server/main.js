@@ -20,7 +20,7 @@ var dbConfig = {
     username: 'bill',
     password: '123465',
     options: {
-        host: '192.168.10.245',
+        host: '43.241.238.151',
         port: '3306',
         dialact: 'mysql',
         pool: {
