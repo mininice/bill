@@ -1,0 +1,32 @@
+build/
+/client/bundles
+/webroot/webpack
+/webroot/app-proto*
+/server/templates/assets.json
+/letsencrypt/*
+
+# 需要保留的空文件夹内可创建一个 .gitkeep 空文件
+!.gitkeep
+
+# OS X
+**.DS_Store
+._*
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Editors
+*.sublime-workspace
+.vscode
+*.swp
+*.swo
+*~
+\#*\#
+.\#*
+.idea
+*.iml
+
+# ternjs
+.tern-*
+coverage
