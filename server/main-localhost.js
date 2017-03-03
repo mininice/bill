@@ -14,7 +14,9 @@ const url = `${host}:${port}`
 
 const app = new Koa()
 app.keys = ['app-proto']
-app.use(serve('webroot'))
+app.use(serve('webroot'));
+app.use(serve('client/assets'));
+
 app.use(logger())
 
 
@@ -28,7 +30,7 @@ var dbConfig = {
     username: 'bill',
     password: '123465',
     options: {
-        host: '192.168.10.245',
+        host: '172.25.121.135',
         port: '3306',
         dialact: 'mysql',
         pool: {

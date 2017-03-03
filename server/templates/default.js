@@ -30,6 +30,7 @@ export default class DefaultTpl extends Template {
       <html>
         <head>
           <meta charSet="utf-8" />
+          <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
           <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
           <script>window.serveData=${serveData}</script>
         </head>

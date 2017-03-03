@@ -1,6 +1,6 @@
 export default {
-  urls: ['/bill', '/bill/(.*)?', '/todo/(.*)?'],
-  template: 'default',
+  urls: ['/mindmap'],
+  template: 'mindmap',
   controller: async function (ctx) {
   	const sourceKey =  ctx.request.url.replace(/\/([a-z]+)?/g, function(x, y, z) {
   		if(z === 0) {

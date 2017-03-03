@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { canUseDOM } from 'exenv'
-import routes from '@apps/route'
-import App from '@apps/index.vue'
+import routes from '@apps/bill/route'
+import App from '@apps/bill/index.vue'
 
 Vue.use(VueRouter)
 const router = new VueRouter({
@@ -14,15 +14,8 @@ const router = new VueRouter({
 if (canUseDOM) {
 	const VueResource = require('vue-resource');
 	Vue.use(VueResource);
-
-  	Vue.use(() => {
-      Object.defineProperty(Vue.prototype, '$serveData', {
-        get() {
-          return window.serveData
-        }
-      });
-    });
-  	new Vue({ el: '#app', router, render: h => h(App) });
+  	
+  new Vue({ el: '#app', router, $serveData: window.serveData, render: h => h(App) });
   	
 }
 
@@ -30,15 +23,7 @@ if (canUseDOM) {
 export default context => {
   	// context.data (服务端传递的数据)
   	router.push(context.url);
-
-	Vue.use(() => {
-      	Object.defineProperty(Vue.prototype, '$serveData', {
-        	get() {
-          		return context.serveData
-        	}
-      	});
-    });
-  	return new Vue({ el: '#app', router, render: h => h(App) })
+  	return new Vue({ el: '#app', $serveData: context.serveData, router, render: h => h(App) })
 }
 
 

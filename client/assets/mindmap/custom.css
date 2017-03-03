@@ -1,0 +1,34 @@
+.config {
+    width: 210px;
+    padding: 10px;
+    background: #eee;
+    position: fixed;
+    top:0;
+}
+.tools {
+  margin-top: 10px;
+  border-bottom: 1px solid #ddd;
+}
+.diagram {
+  border-left: 1px solid #ddd;
+  padding: 10px;
+  margin-left: 210px;
+}
+
+.font-color span, .line-color span, .background span {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+
+.font-color .current, .line-color .current {
+  border: 1px solid #fff;
+}
+
+textarea {
+  height: 200px;
+  border: 1px solid #eee;
+  font-size: 12px;
+}
