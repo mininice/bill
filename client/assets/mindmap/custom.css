@@ -4,16 +4,51 @@
     background: #eee;
     position: fixed;
     top:0;
+    height: 100%;
+    border-right: 1px solid #ddd;
+    z-index: 10;
 }
 .tools {
   margin-top: 10px;
   border-bottom: 1px solid #ddd;
 }
 .diagram {
-  border-left: 1px solid #ddd;
   padding: 10px;
-  margin-left: 210px;
+  margin-left: 222px;
+  position: relative;
+  z-index: 2
 }
+
+.top-config {
+  position: fixed;
+  top: 10px;
+  padding-left: 240px;
+  border-bottom: 2px solid #ddd;
+  width: 100%;
+  padding-bottom: 10px;
+  z-index: 7;
+}
+#myDiagramDiv {
+  top: 40px;
+  min-height: 400px;
+}
+
+.help {
+  float: right;
+  margin-right: 300px;
+}
+.help-doc {
+  width: 800px;
+  position: fixed;
+  right: 0;
+  top: 30px;
+  height: 600px;
+  background: #eee;
+  border: 1px solid #fff;
+  z-index: 100;
+  overflow-y: auto;
+}
+
 
 .font-color span, .line-color span, .background span {
   width: 20px;
@@ -27,8 +62,29 @@
   border: 1px solid #fff;
 }
 
+.fa-flag {
+  cursor: pointer;
+  margin-left: 2px;
+}
+
+.img-container {
+  z-index: 10000;
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: fixed;
+}
+
+label {
+  color: #339944;
+}
 textarea {
   height: 200px;
   border: 1px solid #eee;
   font-size: 12px;
+}
+
+input {
+  width: 30px;
+  display: inline-block;
 }

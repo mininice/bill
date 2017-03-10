@@ -1,55 +1,107 @@
 
 <template>
 <div id="mindmap-view">
+<div class="img-container"></div>
+<pre class="help-doc" v-if="showHelp">
+<h3>你可以用它干什么</h3>
+1.梳理脑图
+2.任务分解和管理
+3.存储和分享
+
+<h3>功能介绍</h3>
+#.快捷键支持
+  1.添加节点
+  shift/tab
+
+  2.局部布局
+  L
+
+  3.其它的快捷键参考
+  http://gojs.net/latest/api/symbols/CommandHandler.html
+
+#.移动节点
+拖到对应的目标节点上
+
+#.任务管理
+点击checkbox将会开启任务管理模式，这个功能是mindmap的核心功能，推荐试用一下👍
+
+#.界面支持
+  1.设置线的大小和颜色
+    没有选中节点时，将会设置所有线的颜色
+    选中某条线上的任意节点，点击Line Color中选颜色，本条线上的所有父子节点的颜色都将改变
+
+  2.设置字体颜色
+    选中某个节点将改变某一个节点上的字体的颜色
+
+  3.支持修改背景颜色
+
+  4.添加旗帜
+    支持添加各种大小和不同颜色的旗帜
+
+
+</pre>
+
+
   <div class="config">
     <h4>Mind Map</h4>
-    <button class="btn btn-xs btn-success" id="SaveButton" onclick="save()">Save</button>
-    <button class="btn btn-xs" onclick="load()">Reload</button>
-    <button class="btn btn-xs" onclick="layoutAll()">Layout</button>
+    <button class="btn btn-xs btn-success" id="SaveButton" v-on:click="save">Save</button>
+    <button class="btn btn-xs" v-on:click="reload">Reload</button>
+    <button class="btn btn-xs" v-on:click="layoutAll">Layout</button>
     <div class="tools form-inline">
-      <label>font size and color</label> 
+      <label>Font Size&Color</label> 
       <div class="font-color">
-        <template v-for="item in color">
-          <span v-on:click="setFontColor" :class="{current:(defaultFontColor === item)}"></span>
-        </template>
-        <input v-model="text.scale"/>
-      </div>
-      <label>line size and color</label>
-      <div class="line-color">
-        <template v-for="item in color">
-          <span v-on:click="setLineColor" :class="{current:(defaultLineColor === item)}"></span>
-        </template>
-        <input placeholder="wordLineSpead" v-model="wordLineSpead"/>
-        <input placeholder="lineWeight" v-model="lineWeight" />
-      </div>
-      <label>add flag icon</label>
-      <div class="flag">
-        <input class="size" placeholder="size" v-model="flagSize">
-        <template v-for="item in color">
-          <i class="fa fa-flag" :class="{current: item === defaultFlagColor}" 
-          v-on:click="addFlag" style="marginLeft: 4" :style="{color: item}"></i>
-        </template>
-      </div>
-      <div class="hasCheckbox">
-        <label>checkbox config</label>>
+        scale:
+        <input v-model="text.scale" v-on:blur="setFontScale(text.scale)" placeholder="scale" size="10"/>
         <div>
-            <input v-model="{{hasCheckbox.visible}}" placeholder="visible"/>
-            {{#if hasCheckbox.visible}}
-            <input v-model="{{hasCheckbox.size}}" placeholder="size" />
-            <input v-model="hasCheckbox.strokeWidth" placeholder="strokeWidth" />
-            <input v-model="hasCheckbox.checkedColor" placeholder="checkedColor" />
-            <input v-model="hasCheckbox.defaultColor" placeholder="defaultColor" />
-            {{/if}}
+        <template v-for="item in color">
+          <span v-on:click="setFontColor(item)" :style="{background: item}" :class="{current:(defaultFontColor === item)}"></span>
+        </template>
         </div>
       </div>
-      <label>background</label>
+      <label>Line Color</label>
+      <div class="line-color">
+        <template v-for="item in color">
+          <span v-on:click="setLineColor(item)" :style="{background: item}" :class="{current:(defaultLineColor === item)}"></span>
+        </template>
+      </div>
+      <label>Flag Icon</label>
+      <div class="flag">
+        size: <input class="size" v-model="flagSize">
+        <template v-for="item in color">
+          <i class="fa fa-flag" :class="{current: item === defaultFlagColor}" 
+          v-on:click="addFlag(item)" style="marginLeft: 4" :style="{color: item}"></i>
+        </template>
+      </div>
+      
+      <label>Background</label>
       <div class="background">
-        <span v-for="item in color" v-on:click="setBackground" :class="[item===defaultBgColor ? 'current' : '']"></span>
+        <span v-for="item in backgroundColor" :style="{background: item}" v-on:click="setBackground(item)" :class="[item===defaultBgColor ? 'current' : '']"></span>
       </div>
     </div>
   </div>
   <div class="diagram">
-    <div id="myDiagramDiv" :style="width:100%; height:400px; background: {{defaultBgColor}}"></div>
+    <div id="myDiagramDiv" :style="{background: defaultBgColor}"></div>
+  </div>
+  <div class="top-config">
+      WordSpead:
+      <input placeholder="wordLineSpead" v-on:blur="refreshDiagram" v-model="wordLineSpead"/>
+      LineWeigth:
+      <input placeholder="lineWeight" v-on:blur="refreshDiagram" v-model="lineWeight" />
+
+    <span class="hasCheckbox">
+      <span>
+          CheckBox: <input type="checkbox" v-model="hasCheckbox.visible"/>
+          <span v-show="hasCheckbox.visible">
+            <!-- <input v-model="hasCheckbox.size" placeholder="size" />
+            <input v-model="hasCheckbox.strokeWidth"  placeholder="width" />
+            <input v-model="hasCheckbox.checkedColor" style="width: 50px" placeholder="checkedColor" />
+            <input v-model="hasCheckbox.defaultColor" style="width: 50px" placeholder="defaultColor" /> -->
+          </span>
+      </span>
+    </span>
+    <span class="help">
+      <button v-on:click="help(showHelp)" class="btn-xs">帮助文档</button> 
+    </span>
   </div>
 </div>
 </template>
@@ -58,10 +110,10 @@
 <script>
 import MindMap from "@assets/mindmap/index.js";
 
-const model = { "class": "go.TreeModel",
+var model = { "class": "go.TreeModel",
   "nodeDataArray": [ 
 {"key":0, "text":"Mind Map", "loc":"88 3"},
-{"key":1, "parent":0, "text":"我的门的\nksdjf卡拉斯京地方\n more time", "brush":"skyblue", "dir":"left", "flag":{"size":10, "color":"red"}, "loc":"68 -55.5", "fontColor":"orange"},
+{"key":1, "parent":0, "text":"我的门的\nksdjf卡拉斯京地方\n more time", "checked":true, "brush":"skyblue", "dir":"left", "flag":{"size":10, "color":"red"}, "loc":"68 -55.5", "fontColor":"orange"},
 {"key":11, "parent":1, "text":"Wake up early", "brush":"skyblue", "dir":"left", "loc":"-95.314453125 -83.5"},
 {"key":12, "parent":1, "text":"Delegate", "brush":"skyblue", "dir":"left", "loc":"-95.314453125 -55.5"},
 {"key":13, "parent":1, "text":"Simplify", "brush":"skyblue", "dir":"left", "loc":"-95.314453125 -27.5"},
@@ -80,8 +132,12 @@ const model = { "class": "go.TreeModel",
 {"key":41, "parent":4, "text":"Methods", "brush":"coral", "dir":"left", "loc":"-45.86083984375003 127.00000000000003"},
 {"key":42, "parent":4, "text":"Deadlines", "brush":"coral", "dir":"left", "loc":"-45.86083984375 155"},
 {"key":43, "parent":4, "text":"Checkpoints", "brush":"coral", "dir":"left", "loc":"-45.86083984375003 182.99999999999997"},
- ]
-};
+{"text":"New Comment", "brush":"darkseagreen", "parent":2, "category":"Comment", "key":-21,  "loc":"100 200"}
+ ]};
+
+
+
+
 
 export default {
   name: 'app',
@@ -101,33 +157,56 @@ export default {
         defaultColor: '#ddd',
         visible: false
       },
+      showHelp: false,
       id: "myDiagramDiv",
       text: {
         scale: 1
       },
-      lineWeight: 1,
+      lineWeight: 2,
       wordLineSpead: 8
+    };
   },
   mounted() {
-    this.diagram = MindMap(this.state, model);
-  },  
+    this.diagram = MindMap(this.$data, model);
+    $('.mindmap-view').css('height', $(window).height());
+    $('.mindmap-view').css('width', $(window).width());
+    $('#myDiagramDiv').css('height', $(window).height() - 50);
+    var canvas = null;
+    while(!canvas) {
+      canvas = $('canvas');
+      canvas.height(20000);
+    }
+  },
+  watch: {
+    "hasCheckbox.visible": function(visible) {
+      this.diagram.actions.addCheckbox(visible);
+    }
+  },
   methods: {
     addFlag: function(color) {
-      var color = $(e.target).data('color');
-      var size = this.state.$('.flag .size').val();
-
-      this.diagram.actions.changeSelectionsProperty('flag', {size: parseInt(size), color: color});
+      var size = parseInt(this.flagSize);
+      this.diagram.actions.changeSelectionsProperty('flag', {size: size, color: color});
     },
-    setLineColor: function() {
-      var node = $(e.target);
-      var color = node.data('color');
-      $('.line-color .current').removeClass('current');
-      node.addClass('current');
-      Actions.setConfig('defaultLineColor', color);
+    refreshDiagram: function() {
+      this.$data.lineWeight = parseInt(this.lineWeight);
+      this.$data.wordLineSpead = parseInt(this.wordLineSpead);
+      this.diagram.actions.refresh();
+    },
+    setLineColor: function(color) {
+      var diagram = this.diagram;
+      this.defaultLineColor = color;
+      diagram.actions.setConfig('defaultLineColor', color);
       
-      if(diagram.selection.size > 1) return '请选择一个节点，该节点上关联的所有父亲和子节点都会变化线条颜色';
-      if(diagram.selection.size === 1) {
-        var iterator = myDiagram.selection.iterator;
+      if(diagram.selection.size > 1) {
+        return '请选择一个节点，该节点上关联的所有父亲和子节点都会变化线条颜色';
+      } else if(diagram.selection.size === 0) {
+          var root = diagram.findNodeForKey(0);
+
+          root.findTreeParts().each(function(child) {
+              child.diagram.model.setDataProperty(child.part.data, 'brush', color);
+          }); 
+      } else if(diagram.selection.size === 1) {
+        var iterator = diagram.selection.iterator;
         while(iterator.next()) {
           var item = iterator.value;
           item.findTreeParts().each(function(child) {
@@ -136,13 +215,40 @@ export default {
         }
       }
     },
-    setFontColor: function() {
-      var node = $(e.target);
-      var color = node.data('color');
-      $('.font-color .current').removeClass('current');
-      node.addClass('current');
-      Actions.setConfig('defaultFontColor', color);
-      Actions.changeSelectionsProperty('fontColor', color);
+    setFontScale: function(scale) {
+      this.diagram.actions.changeSelectionsProperty('scale', scale);
+    },
+    setFontColor: function(color) {
+      this.diagram.actions.setConfig('defaultFontColor', color);
+      this.diagram.actions.changeSelectionsProperty('fontColor', color);
+    },
+    setBackground: function(color) {
+      this.defaultBgColor = color;
+    },
+    save: function() {
+      var data = this.diagram.actions.getJSON();
+
+    },
+    reload: function() {
+      var data = JSON.parse(this.diagram.modelStr);
+      this.diagram.actions.reload(data);
+    },
+    layoutAll: function() {
+      this.diagram.actions.layoutAll();
+    },
+    help: function(showHelp) {
+      var d = this.diagram.documentBounds;
+      var img = this.diagram.makeImage({
+        scale: 1,
+        type: "image/jpeg",
+        background: 'AntiqueWhite',
+        //size: new go.Size(d.width,d.height)
+      });
+      img.className = "images";
+
+      $('.img-container').append(img);
+      $('.img-container').show();
+      this.showHelp = !this.showHelp;
     }
   }
 }

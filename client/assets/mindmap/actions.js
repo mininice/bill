@@ -3,20 +3,31 @@
 var myDiagram = null;
 
 function actions(diagram) {
-  myDiagram = diagram;
+
+  if(diagram) {
+    myDiagram = diagram;
+  }
+
+
+  return {
+    setConfig: setConfig,
+    addComment: addComment,
+    changeSelectionsProperty: changeSelectionsProperty,
+    changeCheckState: changeCheckState,
+    spotConverter: spotConverter,
+    layoutTree: layoutTree,
+    updateNodeDirection: updateNodeDirection,
+    addCheckbox: addCheckbox,
+    reload: reload,
+    layoutAll: layoutAll,
+    getJSON: getJSON,
+    refresh: refresh,
+    addNodeAndLink: addNodeAndLink,
+    layoutSelection: layoutSelection,
+    shiftNodesToNewParent: shiftNodesToNewParent
+  }
 }
-
-export default {
-  setConfig: setConfig,
-  addComment: addComment,
-  changeSelectionsProperty: changeSelectionsProperty,
-  changeCheckState: changeCheckState,
-  spotConverter: spotConverter,
-  layoutTree: layoutTree,
-
-
-}
-
+export default actions;
 
 function spotConverter(dir, from) {
   if (dir === "left") {
@@ -32,7 +43,6 @@ function changeCheckState(obj, checked) {
   checked = checked !== undefined  ? checked : !part.data.checked;
   part.diagram.model.setDataProperty(part.data, "checked", checked);
 
-  console.log(part);
   // gives us an iterator of the child nodes related to this particular node
   if(checked) {
       var chl = part.findTreeChildrenNodes(); 
@@ -46,6 +56,29 @@ function changeCheckState(obj, checked) {
       }
   }
 }
+
+
+function shiftNodesToNewParent(node) {
+  if (!(node instanceof go.Node)) return;
+  // look for Parts overlapping the node
+  var flag = true;
+  var exist = null;
+  while (flag) {
+    var exist = myDiagram.findObjectsIn(node.actualBounds,
+                    // only consider Parts
+                    function(obj) { return obj.part; },
+                    // ignore Links and the dropped node itself
+                    function(part) { return part instanceof go.Node && part !== node; },
+                    // check for any overlap, not complete containment
+                    true).first();
+    
+    if (exist === null) break;
+    node.part.diagram.model.setDataProperty(node.part.data, 'parent', exist.part.data.key);
+    layoutTree(exist);
+    flag = false;
+  }
+}
+
 
 
 //改变文字大小
@@ -66,6 +99,7 @@ function updateNodeDirection(node, dir) {
   var dir = dir || (rootX < nodeX ? "right" : "left");
   var loc = parseInt(nodeX) + " " + parseInt(nodeY);
 
+  console.log(dir);
   myDiagram.model.setDataProperty(node.data, "loc", loc);
   myDiagram.model.setDataProperty(node.data, "dir", dir);
 
@@ -79,7 +113,7 @@ function updateNodeDirection(node, dir) {
 
 
 //新增节点
-function addNodeAndLink(e, obj) {
+function addNodeAndLink() {
   addNodeFromSelection();
 }
 
@@ -93,8 +127,8 @@ function addNodeFromSelection(type, obj) {
   var part = getSelectionNode();
   if(!part) return;
   var olddata = part.data;
-  var brush = olddata.brush || config.defaultLineColor;
-  var newdata = { text: "New Node", brush: brush, dir: olddata.dir, parent: olddata.key};
+  var brush = olddata.brush || myDiagram.config.defaultLineColor;
+  var newdata = { text: "New Node", brush: brush, checkbox: olddata.checkbox, dir: olddata.dir, parent: olddata.key};
   if(type === 'comment') {
     newdata.category = "Comment";
     newdata.text = 'New Comment'
@@ -103,6 +137,11 @@ function addNodeFromSelection(type, obj) {
   part.diagram.model.addNodeData(newdata);
   layoutTree(part);
   part.diagram.commitTransaction('Add Comment');
+}
+
+function layoutSelection() {
+  var part = getSelectionNode();
+  layoutTree(part);
 }
 
 
@@ -170,15 +209,26 @@ function layoutAll() {
 }
 
 // Show the diagram's model in JSON format
-function save() {
+function getJSON() {
   var model = myDiagram.model.toJson();
   myDiagram.isModified = false;
-  console.log(model);
+  return model;
 }
 
-function load() {
-  myDiagram.model = go.Model.fromJson(JSON.parse(myDiagram.modelStr));
+function reload(json) {
+  myDiagram.model = go.Model.fromJson(json);
 }
+
+function addCheckbox(visible) {
+  var json = JSON.parse(myDiagram.model.toJson());
+  var node = json.nodeDataArray;
+  node.forEach(function(item) {
+    item.checkbox = visible;
+  });
+  reload(json);
+}
+
+
 
 function changeSelectionsProperty(p, value) {
   if(myDiagram.selection.size >= 1) {
@@ -192,6 +242,19 @@ function changeSelectionsProperty(p, value) {
 }
 
 
-function setConfig(p, value) {
-  myDiagram.config[p] = value
+function refresh() {
+  console.log(myDiagram.config);
+  myDiagram.model = go.Model.fromJson(getJSON());
 }
+
+function setConfig(p, value) {
+  if(p.indexOf('.') > -1) {
+    p = p.split('.');
+    myDiagram.config[p[0]][p[1]] = value;
+  } else {
+    myDiagram.config[p] = value
+  }
+}
+
+
+

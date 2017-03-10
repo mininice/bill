@@ -19,7 +19,7 @@ export default class DefaultTpl extends Template {
           	<meta charSet="utf-8" />
           	<!-- include libraries(jQuery, bootstrap) -->
       			<!-- include summernote css/js-->
-
+            <title>mindmap</title>
             <link href="http://cs0.meituan.net/cos.ui/cos-ui.css" rel="stylesheet">
             <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script> 
             <script src="/js/go.js"></script>

@@ -9,7 +9,7 @@ function mindmap(config, model) {
   diagram.modelStr = modelStr;
   diagram.config = config;
   diagram.model = go.Model.fromJson(model);
-  diagram.actions = Actions;
+  diagram.actions = Actions(diagram);
   return diagram;
 }
 
