@@ -101,6 +101,8 @@
     </span>
     <span class="help">
       <button v-on:click="help(showHelp)" class="btn-xs">帮助文档</button> 
+      <button v-on:click="exportImage(exportImageDesc)" class="btn-xs">{{exportImageDesc}}</button> 
+
     </span>
   </div>
 </div>
@@ -163,7 +165,8 @@ export default {
         scale: 1
       },
       lineWeight: 2,
-      wordLineSpead: 8
+      wordLineSpead: 8,
+      exportImageDesc: "导出图片"
     };
   },
   mounted() {
@@ -236,18 +239,28 @@ export default {
     layoutAll: function() {
       this.diagram.actions.layoutAll();
     },
-    help: function(showHelp) {
-      var d = this.diagram.documentBounds;
-      var img = this.diagram.makeImage({
-        scale: 1,
-        type: "image/jpeg",
-        background: 'AntiqueWhite',
-        //size: new go.Size(d.width,d.height)
-      });
-      img.className = "images";
+    exportImage: function(exportImage) {
+      if(exportImage === "导出图片") {
+        this.exportImageDesc = "隐藏图片";
+        var d = this.diagram.documentBounds;
+        var img = this.diagram.makeImage({
+          scale: 1,
+          type: "image/jpeg",
+          background: 'AntiqueWhite',
+          //size: new go.Size(d.width,d.height)
+        });
+        img.className = "images";
 
-      $('.img-container').append(img);
-      $('.img-container').show();
+        $('.img-container').append(img);
+        $('.img-container').show();
+      } else {
+        this.exportImageDesc = "导出图片";
+        $('.img-container img').remove();
+        $('.img-container').hide();
+      }
+    },
+    help: function(showHelp) {
+     
       this.showHelp = !this.showHelp;
     }
   }
