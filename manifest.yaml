@@ -1,0 +1,18 @@
+# manifest.yaml 可配置项参考：
+# http://wiki.sankuai.com/pages/viewpage.action?pageId=410010661
+version: v1
+
+build:
+  tools:
+    node: &node_version 6.7.0
+  target:
+    files:
+    - ./*
+  run:
+    cmd:
+    # 安装依赖
+    - NODE_ENV=production npm --registry=http://r.npm.sankuai.com install
+
+autodeploy:
+  targetDir: /opt/meituan/jianshu
+  run: npm start

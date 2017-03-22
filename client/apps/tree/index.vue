@@ -1,12 +1,12 @@
 
 <template>
   <div id="naotu-view">
-    <lable>包含checkbox: <input type="checkbox" name="hascheckbox" value="1"/></label>
-    <lable>展示风格: 
+    <label>包含checkbox: <input type="checkbox" name="hascheckbox" value="1"/></label>
+    <label>展示风格: 
       <select>
           <option value="tree">tree</option>
       </select>
-    </lable>
+    </label>
 
     <button class="btn btn-xs btn-success viewDetail" v-on:click="doSomething">save</button>
     <div class="tree-view"></div>

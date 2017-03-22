@@ -14,7 +14,7 @@
           <img :src="item.pic"/>
         </div>
         <div style="line-height: 18px">
-          <span class="title"><a :href="'/mindmap/' + item.uuid">{{item.name}}</span>
+          <span class="title"><a :href="'/mindmap/' + item.uuid">{{item.name}}</a></span>
           <Favorite :uuid="item.uuid" :favorite="item.favorite"></Favorite>
           <i class="font-gray">{{item.release ? '已发布' : "草稿"}}</i>
           <i class="owner"><span class="fa fa-flag focus"></span>{{item.owner}}</i>
