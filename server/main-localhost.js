@@ -7,6 +7,7 @@ import config from '@server/config'
 import recipes from 'app-proto-recipes'
 
 
+
 config.env = process.env.NODE_ENV || 'development'
 const host = 'http://127.0.0.1'
 const port = process.env.PORT || config.port
@@ -20,6 +21,7 @@ app.use(serve('client/assets'));
 app.use(logger())
 
 
+
 var dbMysql = require('koa-mysql-sequelize');
 var path = require('path');
 
@@ -30,7 +32,8 @@ var dbConfig = {
     username: 'bill',
     password: '123465',
     options: {
-        host: '192.168.10.245',
+        //host: '192.168.1.111',
+        host: '172.25.121.205',
         port: '3306',
         dialact: 'mysql',
         pool: {

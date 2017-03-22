@@ -24,7 +24,8 @@ function actions(diagram) {
     refresh: refresh,
     addNodeAndLink: addNodeAndLink,
     layoutSelection: layoutSelection,
-    shiftNodesToNewParent: shiftNodesToNewParent
+    shiftNodesToNewParent: shiftNodesToNewParent,
+    changeTextSize: changeTextSize
   }
 }
 export default actions;
@@ -40,7 +41,7 @@ function spotConverter(dir, from) {
 
 function changeCheckState(obj, checked) {
   var part = obj.part;
-  checked = checked !== undefined  ? checked : !part.data.checked;
+  checked = checked !== undefined  ? checked : part.data.checked;
   part.diagram.model.setDataProperty(part.data, "checked", checked);
 
   // gives us an iterator of the child nodes related to this particular node
@@ -83,7 +84,14 @@ function shiftNodesToNewParent(node) {
 
 //改变文字大小
 function changeTextSize(obj, factor) {
-  var adorn = obj.part;
+  var adorn = null;
+  if(!obj) {
+    obj = getSelectionNode()
+    if(!obj) return;
+    adorn = obj.part;
+  } else {
+    adorn = obj.part;
+  }
   adorn.diagram.startTransaction("Change Text Size");
   var scale = adorn.data.scale || 1;
   adorn.diagram.model.setDataProperty(adorn.data, "scale", scale * factor);
@@ -92,6 +100,7 @@ function changeTextSize(obj, factor) {
 
 //moved的时候改变自节点布局和方向
 function updateNodeDirection(node, dir) {
+
   var nodeY = node.location.y;
   var nodeX = node.location.x;
   var rootX = myDiagram.findNodeForKey(0).location.x;
@@ -99,14 +108,13 @@ function updateNodeDirection(node, dir) {
   var dir = dir || (rootX < nodeX ? "right" : "left");
   var loc = parseInt(nodeX) + " " + parseInt(nodeY);
 
-  console.log(dir);
   myDiagram.model.setDataProperty(node.data, "loc", loc);
   myDiagram.model.setDataProperty(node.data, "dir", dir);
 
   // recursively update the direction of the child nodes
 
   var chl = node.findTreeChildrenNodes(); // gives us an iterator of the child nodes related to this particular node
-  while(chl.next()) {
+  if(chl.next()) {
     updateNodeDirection(chl.value, dir);
   }
 }
@@ -127,7 +135,14 @@ function addNodeFromSelection(type, obj) {
   var part = getSelectionNode();
   if(!part) return;
   var olddata = part.data;
-  var brush = olddata.brush || myDiagram.config.defaultLineColor;
+
+
+  var brush;
+  if(olddata.brush && olddata.key !== 0) {
+    brush = olddata.brush;
+  } else {
+    brush = myDiagram.config.lineColor;
+  }
   var newdata = { text: "New Node", brush: brush, checkbox: olddata.checkbox, dir: olddata.dir, parent: olddata.key};
   if(type === 'comment') {
     newdata.category = "Comment";
@@ -150,14 +165,7 @@ function getSelectionNode() {
     alert("请选择一个节点添加备注!");
     return null;
   }
-  if(myDiagram.selection.size === 1) {
-    var iterator = myDiagram.selection.iterator;
-    while(iterator.next()) {
-      return iterator.value.part;
-    }
-  } else {
-    return null;
-  }
+  return myDiagram.selection.first();
 }
 
 

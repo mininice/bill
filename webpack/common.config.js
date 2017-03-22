@@ -1,5 +1,8 @@
 const path = require('path')
 const fs = require('fs')
+const merge = require('merge')
+
+const style = require('./style')
 const babelConfig = require('../babel.config')
 const resolve = path.resolve
 const relative = path.relative
@@ -19,7 +22,7 @@ fs.readdirSync(entryContext)
       './' + relative(root, resolve(entryContext, file))
   })
 
-module.exports = {
+const config = {
   entry: entries,
   output: {
     path: resolve(webroot, webAssetsDir),
@@ -32,9 +35,7 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: {
-            'less': 'vue-style-loader!css-loader!less-loader',
-          },
+          loaders: style.cssLoaders()
         },
       },
       {
@@ -62,3 +63,8 @@ module.exports = {
     hints: process.env.NODE_ENV === 'production' ? "warning" : false,
   },
 }
+
+config.module.rules = config.module.rules.concat(style.styleLoaders({sourceMap:false}));
+console.log(config.module.rules, 'kdjfksjdf');
+module.exports = config;
+

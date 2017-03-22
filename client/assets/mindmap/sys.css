@@ -1,0 +1,83 @@
+.top-navbar {
+    height: 42px;
+    border-bottom: 1px solid #ddd;
+    border-top: 3px solid #ec5f47;
+    background: #fff;
+    padding-left: 20px;
+}
+
+.create-button {
+	margin: 10px auto;
+}
+
+
+input {
+  width: 200px;
+  display: inline-block;
+}
+
+a {
+    cursor: pointer;
+}
+
+.simple-info {    
+	border: 1px solid #e3eae1;
+    padding: 4px;
+    border-radius: 4px;
+    background: #fff;
+    margin: 10px 0;
+
+}
+
+.mindmap-list {
+    margin: 0 20px;
+}
+
+
+.list-view img {
+    width: 150px;
+    height: 150px;
+}
+
+.list-view .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    width: 98%;
+}
+.list-view .owner {
+    float: right;
+    color: #ddd;
+}
+
+.list-view-item {   
+    border: 1px solid #e3eae1;
+    border-radius: 4px;
+    background: #fff;
+    padding: 5px;
+    margin-right: 10px;
+    height: 190px;
+    width: 150px;
+    float: left;
+    margin-bottom: 10px;
+}
+.my-jianshu {
+    float: right;
+    margin-top: 10px;
+    margin-right: 20px;
+
+}
+
+.font-gray {
+    color: gray
+}
+
+.logo-title {
+    font-size: 24px;
+    color: #ec5f47;
+}
+.row-fluid [class*="span"] {
+    margin-left: 0;
+    margin-right: 10px;
+}

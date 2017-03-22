@@ -20,16 +20,26 @@ export default class DefaultTpl extends Template {
           	<meta charSet="utf-8" />
           	<!-- include libraries(jQuery, bootstrap) -->
       			<!-- include summernote css/js-->
-            <title>简梳</title>
-            <link href="http://cs0.meituan.net/cos.ui/cos-ui.css" rel="stylesheet">
+            <title>mindmap</title>
+            <link href="/cos.ui/cos.ui.css" rel="stylesheet">
+
             <script src="/js/jquery.js"></script> 
-            <script src="/js/go.js"></script>
-            <script src="/js/TextEditor.js"></script>
           	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
           	<script>window.serveData=${serveData}</script>
         </head>
         <body>
-          
+
+            <nav class="top-navbar">
+              <i class="fa fa-eercast"></i>
+              <span class="logo-title">简梳</span>
+              <span style="font-size:40px; color: #ec5f47;">.</span>
+              <span style="color: gray">让表达更直白</span>
+              <span class="my-jianshu">
+                <a class="label label-primary" href="/list/my">我的简梳</a>
+                <a class="label label-success" href="/list/favorite">我的收藏</a>
+
+              </span>
+            </nav>
             <div id="app"></div>
           	<script src="${js}"></script>
         </body>

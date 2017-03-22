@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const AssetsPlugin = require('assets-webpack-plugin')
 const webpackConfig = module.exports = require('./common.config')
+console.log(webpackConfig.module);
 const assetsPluginInstance = new AssetsPlugin({
   filename: 'assets.json',
   path: path.join(__dirname, '..', 'server', 'templates'),

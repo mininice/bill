@@ -2,12 +2,16 @@ import Koa from 'koa'
 import http from 'http'
 import recipes from 'app-proto-recipes'
 import config from '@server/config'
+import serve from 'koa-static'
+
 
 config.env = process.env.NODE_ENV || 'development'
 const port = process.env.PORT || config.port
 
-const app = new Koa()
-app.keys = ['app-proto']
+const app = new Koa();
+app.use(serve('client/assets'));
+app.use(serve('webroot'));
+app.keys = ['app-proto'];
 
 
 var dbMysql = require('koa-mysql-sequelize');
@@ -20,7 +24,7 @@ var dbConfig = {
     username: 'bill',
     password: '123465',
     options: {
-        host: '43.241.238.151',
+        host: '172.25.121.205',
         port: '3306',
         dialact: 'mysql',
         pool: {

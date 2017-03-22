@@ -1,22 +1,7 @@
-.config {
-    width: 210px;
-    padding: 10px;
-    background: #eee;
-    position: fixed;
-    top:0;
-    height: 100%;
-    border-right: 1px solid #ddd;
-    z-index: 10;
-}
+
 .tools {
-  margin-top: 10px;
+  padding: 3px 10px;
   border-bottom: 1px solid #ddd;
-}
-.diagram {
-  padding: 10px;
-  margin-left: 222px;
-  position: relative;
-  z-index: 2
 }
 
 .top-config {
@@ -29,33 +14,48 @@
   z-index: 7;
 }
 #myDiagramDiv {
-  top: 40px;
   min-height: 400px;
 }
 
+.tools select {
+  width: 50px;
+  height: 20px;
+  background: #daf6d4;
+  border: 1px solid #fff;;
+}
+.diagram {
+  background: #fff;
+  border-top: 3px solid #ec5f47;
+  border-bottom: 1px solid #ddd;
+}
+
+.diagram-header {
+  padding: 10px;
+}
+
+.diagram-title {
+  display: inline-block;
+  width: 200px;
+
+}
+
+.diagram-operator {
+    display: inline-block;
+    float: right;
+}
 .help {
   float: right;
   margin-right: 300px;
 }
-.help-doc {
-  width: 800px;
-  position: fixed;
-  right: 0;
-  top: 30px;
-  height: 600px;
-  background: #eee;
-  border: 1px solid #fff;
-  z-index: 100;
-  overflow-y: auto;
-}
 
 
-.font-color span, .line-color span, .background span {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  display: inline-block;
-}
+/*.font-color span, .line-color span, .background span {
+    width: 15px;  
+    height: 20px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}*/
 
 
 .font-color .current, .line-color .current {
@@ -67,15 +67,6 @@
   margin-left: 2px;
 }
 
-.img-container {
-  z-index: 10000;
-  width: 100%;
-  height: 100%;
-  display: none;
-  position: fixed;
-  top: 100px;
-  left: 200px;
-}
 
 label {
   color: #339944;
@@ -90,3 +81,50 @@ input {
   width: 30px;
   display: inline-block;
 }
+
+a {
+  cursor: pointer;
+}
+
+a:hover {
+  background: #0088cc;
+}
+
+.focus {
+  color:#ddd;
+}
+
+.focus:hover {
+  color: #ec5f47
+}
+
+.my-focus {
+  color: #ec5f47
+}
+.hidden {
+  display: none;
+}
+.operator {
+  margin-left: 20px;
+  margin-bottom: 10px;
+  text-align: right;
+  display: inline-block;
+}
+
+.diagram canvas {
+  border: 1px solid #ddd;
+}
+
+.msg {
+    transition: all .3s ease;
+    height: 30px;
+    padding: 10px;
+    background-color: #eee;
+    overflow: hidden;
+}
+.msg.v-enter, .msg.v-leave {
+    height: 0;
+    padding: 0 10px;
+    opacity: 0;
+}
+

@@ -1,4 +1,4 @@
-var BillList = DB.model.BillList;
+//var BillList = DB.model.BillList;
 
 /**
  * 创建客栈

@@ -1,4 +1,4 @@
-var User = DB.model.User;
+//var User = DB.model.User;
 
 /**
  * 创建客栈

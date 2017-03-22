@@ -1,5 +1,5 @@
 import Actions from './actions';
-import Template from './template';
+import Template from './template/index';
 
 
 
